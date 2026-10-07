@@ -1152,7 +1152,7 @@ fn levels_work_on_whole_levels() {
     }
 }
 
-// Photoshop (photoshop corpus rgb32 levels.psd): input 15..230, gamma 1.3, output 10..245. In a
+// The oracle corpus' rgb32 levels.psd: input 15..230, gamma 1.3, output 10..245. In a
 // 32-bit document neither range clips and the gamma is a plain power curve mirrored below black:
 // 0.0497 → 3 (the clipped curve gives 10), 0.9473 → 255 (245). Integer documents still clip.
 #[test]
@@ -1164,8 +1164,8 @@ fn levels_dont_clip_in_32_bit() {
         adjust::apply_depth(&adj, &mut b, adjust::Transfer::Srgb, Some(depth));
         (b.px[0][0] * 255.0).round()
     };
-    for (v, ps) in [(0.0, 0.0), (0.0497, 3.0), (0.0976, 32.0), (0.4508, 140.0), (0.9473, 255.0), (1.0, 255.0)] {
-        assert_eq!(level(SampleType::F32, v), ps, "{v}");
+    for (v, want) in [(0.0, 0.0), (0.0497, 3.0), (0.0976, 32.0), (0.4508, 140.0), (0.9473, 255.0), (1.0, 255.0)] {
+        assert_eq!(level(SampleType::F32, v), want, "{v}");
     }
     assert_eq!(level(SampleType::U8, 0.0), 10.0);
     assert_eq!(level(SampleType::U8, 1.0), 245.0);

@@ -539,10 +539,10 @@ pub fn levels_q(ch: &LevelsChannel, v: f32, quantum: Option<f32>) -> f32 {
     ch.out_black + t * (ch.out_white - ch.out_black)
 }
 
-/// [`levels`] in a 32-bit document. Photoshop clips neither the input to the input range nor the
-/// result to the output range there, and the midtone gamma is a plain power curve, mirrored below
-/// the black point (photoshop corpus rgb32 and gray32 levels.psd: within 0.5/255, 10/255 off
-/// with the clipped curve).
+/// [`levels`] in a 32-bit document. Neither the input is clipped to the input range nor the result
+/// to the output range there, and the midtone gamma is a plain power curve, mirrored below the
+/// black point (the oracle corpus' rgb32 and gray32 levels.psd: within 0.5/255, 10/255 off with
+/// the clipped curve).
 pub fn levels_float(ch: &LevelsChannel, v: f32) -> f32 {
     let t = (v - ch.in_black) / (ch.in_white - ch.in_black).max(1e-6);
     let t = t.signum() * t.abs().powf(1.0 / ch.gamma.max(0.01));
